@@ -37,22 +37,26 @@ namespace Product_Management_System.Services
         public async Task<List<Product>> FilterProducts(string productName, int? price)
         {
             var allProducts = await _context.Products.ToListAsync();
-
-            var filteredProducts = allProducts; //.Result
+            var filteredProducts = allProducts; // Start with all products
 
             // Apply filters based on the provided parameters
             if (!string.IsNullOrEmpty(productName))
             {
-                filteredProducts = filteredProducts.Where(p => p.Name.Contains(productName, StringComparison.OrdinalIgnoreCase)).ToList();
+                filteredProducts = filteredProducts
+                    .Where(p => p.Name.ToLower().Contains(productName.ToLower()))
+                    .ToList();
             }
 
             if (price.HasValue)
             {
-                filteredProducts = filteredProducts.Where(p => p.Price == price.Value).ToList();
+                filteredProducts = filteredProducts
+                    .Where(p => p.Price == price)
+                    .ToList();
             }
 
             return filteredProducts;
         }
+
 
         public async Task<Product> GetProduct(Guid id)
         {

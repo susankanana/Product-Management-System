@@ -41,6 +41,19 @@ namespace Product_Management_System.Controllers
             }
             return Ok(order);
         }
+
+        [HttpGet("user-orders/{userId}")]
+        [Authorize]
+        public async Task<ActionResult<List<UserOrderResponseDto>>> GetUserOrders(Guid userId)
+        {
+
+            var userOrders = await _orderService.GetUserOrders(userId);
+            var userOrderDtos = _mapper.Map<List<UserOrderResponseDto>>(userOrders);
+
+            return Ok(userOrderDtos);
+
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<string>> AddOrder(AddOrderDto newOrder)
@@ -68,7 +81,7 @@ namespace Product_Management_System.Controllers
             return Ok(response);
         }
         [HttpDelete("id")]
-        public async Task<ActionResult<string>> DeleteProduct(Guid id)
+        public async Task<ActionResult<string>> DeleteOrder(Guid id)
         {
             var order = await _orderService.GetOrder(id);
             if (order == null)

@@ -15,12 +15,10 @@ namespace Product_Management_System.Controllers
     {
         private readonly IProduct _productService;
         private readonly IMapper _mapper;
-        private readonly IOrder _orderService;
-        public ProductController(IProduct prd, IMapper mapper, IOrder ord)
+        public ProductController(IProduct prd, IMapper mapper)
         {
             _productService = prd;
             _mapper = mapper;
-            _orderService = ord;
 
         }
 
@@ -44,17 +42,7 @@ namespace Product_Management_System.Controllers
             
         }
 
-        [HttpGet("user-orders/{userId}")]
-        [Authorize]
-        public async Task<ActionResult<List<UserOrderResponseDto>>> GetUserOrders(Guid userId)
-        {
-            
-                var userOrders = await _orderService.GetUserOrders(userId);
-                var userOrderDtos = _mapper.Map<List<UserOrderResponseDto>>(userOrders);
-
-                return Ok(userOrderDtos);
-            
-        }
+        
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<string>> AddProduct(AddProductDto newProduct)
